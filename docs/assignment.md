@@ -1,6 +1,6 @@
 # Introduction
 
-SDET or a Engineering Manager in Quality, we are pretty hands on when it comes to Quality.
+SDET or an Engineering Manager in Quality, we are pretty hands on when it comes to Quality.
 
 In the assignment, we are looking to see your design and coding skills to see how well you can take care of Quality;
 within the quality department.
@@ -12,7 +12,7 @@ You can use any automation tool/library of your choice - we like selenium but fe
 
 If you like, we also provide you a base test framework so that you can directly get started writing tests, rather than setting up framework. [This framework]
 
-Note: Base (vanilla) framework is to help you get things faster - “if you want to”. However we realize, sometimes you may like to use your own tool set, in which case you are free to do so - with no marks deducted - so feel free to pickup whatever you like :).
+Note: Base (clipboard-recruiting-tht-sdet) framework is to help you get things faster - “if you want to”. However we realize, sometimes you may like to use your own tool set, in which case you are free to do so - with no marks deducted - so feel free to pickup whatever you like :).
 
 > One request, don’t use any low code or licensed automation tools.
 
