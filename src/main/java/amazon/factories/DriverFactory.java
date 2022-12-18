@@ -4,6 +4,7 @@ import amazon.choices.Browser;
 import amazon.choices.Host;
 import com.typesafe.config.Config;
 import amazon.config.EnvFactory;
+import amazon.helper.WaitHelper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
@@ -23,6 +24,10 @@ public class DriverFactory {
         throw new IllegalStateException("Static factory class");
     }
 
+    public static WaitHelper getWaitHelper(WebDriver driver) {
+        return new WaitHelper(driver);
+    }
+
     public static WebDriver getDriver() {
         log.info("Getting driver for host: {}", HOST);
         switch (HOST) {
@@ -33,7 +38,8 @@ public class DriverFactory {
             case DOCKER_SELENIUM_GRID:
                 return getRemoteWebDriver();
             default:
-                throw new IllegalStateException(String.format("%s is not a valid HOST choice. Pick your HOST from %s.", HOST, java.util.Arrays.asList(Host.values())));
+                throw new IllegalStateException(String.format("%s is not a valid HOST choice. Pick your HOST from %s.",
+                        HOST, java.util.Arrays.asList(Host.values())));
         }
     }
 
@@ -53,11 +59,16 @@ public class DriverFactory {
                 WebDriverManager.operadriver().setup();
                 return new OperaDriver();
             default:
-                throw new IllegalStateException(String.format("%s is not a valid browser choice. Pick your browser from %s.", BROWSER, java.util.Arrays.asList(BROWSER.values())));
+                throw new IllegalStateException(
+                        String.format("%s is not a valid browser choice. Pick your browser from %s.", BROWSER,
+                                java.util.Arrays.asList(BROWSER.values())));
         }
     }
 
-    /** Chrome, firefox and edge; are the only 3 options available under docker.selenium.grid */
+    /**
+     * Chrome, firefox and edge; are the only 3 options available under
+     * docker.selenium.grid
+     */
     private static WebDriver getRemoteWebDriver() {
         switch (BROWSER) {
             case CHROME:
@@ -67,7 +78,10 @@ public class DriverFactory {
             case EDGE:
                 return new RemoteWebDriver(URLFactory.getHostURL(HOST), CapabilitiesFactory.getCapabilities(BROWSER));
             default:
-                throw new IllegalStateException(String.format("%s is not a valid browser choice. Pick your browser from %s.", BROWSER, java.util.Arrays.asList(BROWSER.values())));
+                throw new IllegalStateException(
+                        String.format("%s is not a valid browser choice. Pick your browser from %s.", BROWSER,
+                                java.util.Arrays.asList(BROWSER.values())));
         }
     }
+
 }
