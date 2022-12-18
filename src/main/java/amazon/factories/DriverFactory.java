@@ -4,7 +4,6 @@ import amazon.choices.Browser;
 import amazon.choices.Host;
 import com.typesafe.config.Config;
 import amazon.config.EnvFactory;
-import amazon.helper.WaitHelper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
@@ -15,17 +14,13 @@ import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 @Slf4j
-public class DriverFactory {
+public abstract class DriverFactory {
     private static Config config = EnvFactory.getInstance().getConfig();
     private static final Host HOST = Host.parse(config.getString("HOST"));
     private static final Browser BROWSER = Browser.parse(config.getString("BROWSER"));
 
-    private DriverFactory() {
+    public DriverFactory() {
         throw new IllegalStateException("Static factory class");
-    }
-
-    public static WaitHelper getWaitHelper(WebDriver driver) {
-        return new WaitHelper(driver);
     }
 
     public static WebDriver getDriver() {

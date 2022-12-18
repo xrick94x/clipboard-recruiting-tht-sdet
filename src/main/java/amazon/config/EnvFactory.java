@@ -2,17 +2,21 @@ package amazon.config;
 
 import amazon.choices.AppEnv;
 import amazon.choices.Host;
+import amazon.choices.Tools;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 /**
- * Env configuration once loaded, is to remain constant for all classes using it. Thus we will follow Singleton design pattern here.
+ * Env configuration once loaded, is to remain constant for all classes using
+ * it. Thus we will follow Singleton design pattern here.
  * For future reference on this topic: https://github.com/lightbend/config
  */
 public class EnvFactory {
     /**
-     * With this approach, we are relying on JVM to create the unique instance of EnvFactory when the class is loaded.
-     * The JVM guarantees that the instance will be created before any thread accesses the static uniqueInstance variable.
+     * With this approach, we are relying on JVM to create the unique instance of
+     * EnvFactory when the class is loaded.
+     * The JVM guarantees that the instance will be created before any thread
+     * accesses the static uniqueInstance variable.
      * This code is thus guaranteed to be thread safe.
      */
     private static EnvFactory uniqueInstance = new EnvFactory();
@@ -25,25 +29,31 @@ public class EnvFactory {
     }
 
     public Config getConfig() {
-        // Load default properties (first from System properties and then from application.conf file under main -> resources folder)
+        // Load default properties (first from System properties and then from
+        // application.conf file under main -> resources folder)
         Config applicationConfig = ConfigFactory.load();
         Config choicesConfig = ConfigFactory.load("choices");
         Config baseConfig = choicesConfig.withFallback(applicationConfig);
 
         String host = baseConfig.getString("HOST");
         String appEnv = baseConfig.getString("APP_ENV");
-
-        // assert that the host and app choice we fetched from application.conf are actually valid Host and App as specified in Host and App enum classes.
+        String tool = baseConfig.getString("TOOL");
+        // assert that the host and app choice we fetched from application.conf are
+        // actually valid Host and App as specified in Host and App enum classes.
         Host.parse(host);
         AppEnv.parse(appEnv);
-
-        /* Assumption is, if you specified this value in host/app, you have also created a valid file with its hostname.conf/app.name file under main -> resources folder.
-            for inspiration; refer say file app.env.staging.conf (for app env)
+        Tools.parse(tool);
+        /*
+         * Assumption is, if you specified this value in host/app, you have also created
+         * a valid file with its hostname.conf/app.name file under main -> resources
+         * folder.
+         * for inspiration; refer say file app.env.staging.conf (for app env)
          */
         Config hostConfig = ConfigFactory.load(host);
         Config appEnvConfig = ConfigFactory.load(appEnv);
+        Config toolConfig = ConfigFactory.load(tool);
 
-        Config mergedConfig = hostConfig.withFallback(baseConfig);
+        Config mergedConfig = hostConfig.withFallback(baseConfig).withFallback(toolConfig);
         return appEnvConfig.withFallback(mergedConfig);
     }
 }
