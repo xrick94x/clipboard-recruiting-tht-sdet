@@ -14,7 +14,7 @@ import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 @Slf4j
-public abstract class DriverFactory {
+public abstract class DriverFactory extends BaseDriver {
     private static Config config = EnvFactory.getInstance().getConfig();
     private static final Host HOST = Host.parse(config.getString("HOST"));
     private static final Browser BROWSER = Browser.parse(config.getString("BROWSER"));
@@ -23,7 +23,7 @@ public abstract class DriverFactory {
         throw new IllegalStateException("Static factory class");
     }
 
-    public static WebDriver getDriver() {
+    public static WebDriver getSeleniumDriver() {
         log.info("Getting driver for host: {}", HOST);
         switch (HOST) {
             case LOCALHOST:

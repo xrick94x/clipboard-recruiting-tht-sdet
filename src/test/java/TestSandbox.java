@@ -1,4 +1,9 @@
 import amazon.driver.Driver;
+import amazon.factories.PageFactory;
+import amazon.pages.ElectronicsPage;
+import amazon.pages.MenuNavigation;
+import amazon.pages.TopNavigation;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -10,24 +15,34 @@ import org.junit.jupiter.api.BeforeAll;
 
 public class TestSandbox extends Driver {
 
+    private static MenuNavigation menuNavigation;
+    private static ElectronicsPage electronicsPage;
+
     @BeforeAll
     static void setupDriver() {
         initialiseDriver();
+        menuNavigation = new MenuNavigation();
+        electronicsPage = new ElectronicsPage();
     }
 
     @Tag("smokeTest")
     @DisplayName("This test is for demo purpose only to show that the basic code works." +
             "You have to use the best practices that you normally use to design your tests")
     @Test
-    void assertThatHomePageTitleIsCorrect() {
-        webDriver.get(Driver.HOME_PAGE_URL);
-        WebElement element = webDriver.findElement(By.xpath("//div[@id='nav-main']//div[@class='nav-left']//span"));
-        pageFactory.waitHelper.waitForElementToBeClickable(element);
+    void assertSecondHighestTVDetailsIsPresent() {
+        driver.get(Driver.HOME_PAGE_URL);
+        WebElement element = driver.findElement(By.xpath("//div[@id='nav-main']//div[@class='nav-left']//span"));
+        PageFactory.getWaitHelper().waitForElementToBeClickable(element);
         assertEquals(
                 "Online Shopping site in India: Shop Online for Mobiles, Books, Watches, Shoes and More - Amazon.in",
-                webDriver.getTitle());
-        pageFactory.webPage.refreshPage();
-        pageFactory.webPage.quitBrowser();
+                driver.getTitle());
+        menuNavigation.selectHamBurgerMenu();
+        menuNavigation.selectMenuItem("TV, Appliances, Electronics", "Televisions");
+        menuNavigation.selectSubMenuItem("Televisions");
+        electronicsPage.selectBrand("Samsung");
+        electronicsPage.selectSortOption("Price: High to Low");
+        electronicsPage.selectTVModel(1);
+        electronicsPage.quitBrowser();
 
     }
 
