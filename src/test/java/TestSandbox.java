@@ -19,7 +19,7 @@ public class TestSandbox extends Driver {
     private static ElectronicsPage electronicsPage;
 
     @BeforeAll
-    static void setupDriver() {
+    static void setupDriver() throws Exception {
         initialiseDriver();
         menuNavigation = new MenuNavigation();
         electronicsPage = new ElectronicsPage();
@@ -42,6 +42,9 @@ public class TestSandbox extends Driver {
         electronicsPage.selectBrand("Samsung");
         electronicsPage.selectSortOption("Price: High to Low");
         electronicsPage.selectTVModel(1);
+        electronicsPage.switchToAboutItemWindow();
+        electronicsPage.validateAboutThisItemText();
+        electronicsPage.printAboutThisItemText();
         electronicsPage.quitBrowser();
 
     }

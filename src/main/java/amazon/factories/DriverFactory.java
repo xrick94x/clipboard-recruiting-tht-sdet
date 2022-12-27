@@ -6,10 +6,13 @@ import com.typesafe.config.Config;
 import amazon.config.EnvFactory;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
+
+import org.openqa.grid.selenium.GridLauncherV3;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.grid.Main;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -23,7 +26,7 @@ public abstract class DriverFactory extends BaseDriver {
         throw new IllegalStateException("Static factory class");
     }
 
-    public static WebDriver getSeleniumDriver() {
+    public static WebDriver getSeleniumDriver() throws Exception {
         log.info("Getting driver for host: {}", HOST);
         switch (HOST) {
             case LOCALHOST:
@@ -31,6 +34,8 @@ public abstract class DriverFactory extends BaseDriver {
             case DOCKER_CONTAINER:
                 // fall through - same options apply.
             case DOCKER_SELENIUM_GRID:
+                return getRemoteWebDriver();
+            case REMOTE:
                 return getRemoteWebDriver();
             default:
                 throw new IllegalStateException(String.format("%s is not a valid HOST choice. Pick your HOST from %s.",
@@ -63,11 +68,16 @@ public abstract class DriverFactory extends BaseDriver {
     /**
      * Chrome, firefox and edge; are the only 3 options available under
      * docker.selenium.grid
+     * 
+     * @throws Exception
      */
-    private static WebDriver getRemoteWebDriver() {
+    private static WebDriver getRemoteWebDriver() throws Exception {
         switch (BROWSER) {
             case CHROME:
-                // fall - through. Same method for all browsers.
+                WebDriverManager.chromedriver().setup();
+                Main.main(new String[] { "--port", "4509" });
+                return WebDriverManager.chromedriver()
+                        .remoteAddress("http://localhost:4444/wd/hub").create();
             case FIREFOX:
                 // fall - through. Same method for all browsers.
             case EDGE:

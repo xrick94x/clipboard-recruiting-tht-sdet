@@ -51,9 +51,8 @@ public class MenuNavigation extends SeleniumPage {
     }
 
     public void selectSubMenuItem(String subMenuItem) {
-        var list = submenuItemsList();
         _keywordHelper
-                .clickOn(list.stream().filter(x -> x.getText().contains(subMenuItem)).findAny().get());
+                .clickOn(submenuItemsList().stream().filter(x -> x.getText().contains(subMenuItem)).findAny().get());
         _waitHelper.waitForVisibilityOf(submenuNavigationList().get(0));
     }
 

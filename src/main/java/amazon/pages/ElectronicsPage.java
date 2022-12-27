@@ -1,6 +1,7 @@
 package amazon.pages;
 
 import java.util.List;
+import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidArgumentException;
@@ -42,7 +43,9 @@ public class ElectronicsPage extends SeleniumPage {
         return Driver.driver.findElement(By.xpath("//span[@class='a-dropdown-prompt']"));
     }
 
-    // div[contains(@data-component-type,'s-search-result')]//span[contains(@class,'a-price-whole')]/ancestor::a
+    private WebElement aboutItem() {
+        return Driver.driver.findElement(By.xpath("//div[@id='feature-bullets']"));
+    }
 
     public ElectronicsPage() {
         super(Driver.driver);
@@ -73,6 +76,23 @@ public class ElectronicsPage extends SeleniumPage {
         var element = resultsList().get(order);
         var elementToBeClickable = element.findElement(By.xpath("./ancestor::a"));
         _keywordHelper.clickOn(elementToBeClickable);
+    }
+
+    public void switchToAboutItemWindow() {
+        String parentWindow = Driver.driver.getWindowHandle();
+        Set<String> handles = Driver.driver.getWindowHandles();
+        switchToWindow(handles.stream().filter(x -> !x.startsWith(parentWindow)).findAny().get());
+        _waitHelper.waitForVisibilityOf(aboutItem());
+    }
+
+    public void validateAboutThisItemText() {
+        Assert.isTrue(aboutItem().findElement(By.xpath(".//h1")).getText().contains("About this item"),
+                "Text not matched");
+    }
+
+    public void printAboutThisItemText() {
+        var itemsList = aboutItem().findElements(By.xpath(".//ul//li"));
+        itemsList.forEach(s -> System.out.println(s.getText()));
     }
 
 }

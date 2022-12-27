@@ -6,7 +6,8 @@ import java.util.Map;
 public enum Host {
     LOCALHOST("host.localhost"),
     DOCKER_CONTAINER("host.docker.container"),
-    DOCKER_SELENIUM_GRID("host.docker.selenium.grid");
+    DOCKER_SELENIUM_GRID("host.docker.selenium.grid"),
+    REMOTE("host.remotehost");
 
     public final String label;
 
@@ -25,8 +26,10 @@ public enum Host {
     // To get enum name from a label (choice specified in application.conf)
     public static Host parse(String label) {
         if (BY_LABEL.get(label) == null) {
-            throw new IllegalStateException(String.format("%s is not a valid host env choice. Pick your host env from %s." +
-                    "Check the value of 'HOST' property in amazon.choices.conf; Or in CI, if running from continuous integration.", label, BY_LABEL.keySet()));
+            throw new IllegalStateException(String.format(
+                    "%s is not a valid host env choice. Pick your host env from %s." +
+                            "Check the value of 'HOST' property in amazon.choices.conf; Or in CI, if running from continuous integration.",
+                    label, BY_LABEL.keySet()));
         } else {
             return BY_LABEL.get(label);
         }

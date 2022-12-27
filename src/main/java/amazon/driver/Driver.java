@@ -12,7 +12,7 @@ public class Driver {
     // public static DriverFactory driverFactory;
     public static WebDriver driver;
 
-    public static void initialiseDriver() {
+    public static void initialiseDriver() throws Exception {
 
         Config config = EnvFactory.getInstance().getConfig();
         HOME_PAGE_URL = config.getString("HOME_PAGE_URL");
