@@ -23,6 +23,20 @@ For this project to run, you would need to install below 3 dependencies on your 
 For easiest way to getting started, extract this project and open it from IntelliJ.
 > Then Do a dry run on test in : test -> java -> TestSandbox class and see if your setup is correct.  
 
-Tip: Do remember to update this readme file for anything else that you think needs updating here!
+For execution of the existing test please following steps
+
+> From command line execute following command to execute the test 
+> For Test method with specific tag
+mvn -test -D groups="<TagName>"
+
+example mvn -test -D groups="Regression"
+
+> For Specific Test method with name
+mvn test -D test="TestClassName#MethodName"
+
+example = test -D test="TestSandbox#assertSecondHighestTVDetailsIsPresent"
+
+> Through IDE you use Junit Runner (Go to Tests -> Run your specific test method)
+
 
 ## Success
