@@ -20,6 +20,18 @@ For this project to run, you would need to install below 3 dependencies on your 
 
 ## Getting Started
 
+
+## Framework Architecture 
+
+Framework is built on page factory design pattern, where action keywords are wrapped in their implementation
+
+It consists of page classes which have their own WebElements defined along with their respective methods.
+
+Also, framework has separate keywordHelpers and waitHelpers which can be accessed and used for handling wait related scenarios.
+
+It has base page, and tool specific keywords which are implemented by Selenium, other tools can implement the same however configuration needs to be added in Driver factory for them.
+
+
 For easiest way to getting started, extract this project and open it from IntelliJ.
 > Then Do a dry run on test in : test -> java -> TestSandbox class and see if your setup is correct.  
 
